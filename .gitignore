@@ -1,0 +1,9 @@
+/.git
+/scratch.sh
+/.fabric
+/libraries
+/logs
+/versions
+/world
+/backup
+/*.json
