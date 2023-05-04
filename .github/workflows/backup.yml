@@ -14,6 +14,9 @@ jobs:
       
       - name: Get backups from Minecraft server
         run: |
+          sudo apt update
+          sudo apt upgrade -y
+          sudo apt install lftp
           lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "set ftp:ssl-force false; set ssl:verify-certificate false; mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;"
 
       - name: Upload to Google Drive
