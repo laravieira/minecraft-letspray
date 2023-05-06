@@ -11,7 +11,7 @@ jobs:
       - name: Set up environment
         run: |
           sudo apt update
-          sudo apt install lftp touch -y
+          sudo apt install lftp -y
           mkdir ${{ secrets.FTP_LOCAL }}
           touch ~/.ssh/config
           echo StrictHostKeyChecking accept-new > ~/.ssh/config
