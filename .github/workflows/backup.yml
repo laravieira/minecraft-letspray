@@ -15,9 +15,10 @@ jobs:
       - name: Get backups from Minecraft server
         run: |
           sudo apt update
-          sudo apt upgrade -y
-          sudo apt install lftp
-          lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "set ftp:ssl-force false; set ssl:verify-certificate false; set sftp:auto-confirm true; set ssl:check-hostname: false; mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;"
+          sudo apt install lftp touch -y
+          touch ~/.ssh/config
+          echo StrictHostKeyChecking accept-new > ~/.ssh/config
+          lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;"
 
       - name: Upload to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
@@ -25,3 +26,4 @@ jobs:
           credentials: ${{ secrets.GCP_CREDENTIALS }}
           filename: "${{ secrets.FTP_LOCAL }}/*"
           folderId: ${{ secrets.GCP_FOLDER_ID }}
+          overwrite: true
