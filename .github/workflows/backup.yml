@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Make backup temp folder
-        run: |
-          mkdir ${{ secrets.FTP_LOCAL }}
-      
-      - name: Get backups from Minecraft server
+      - name: Set up environment
         run: |
           sudo apt update
           sudo apt install lftp touch -y
+          mkdir ${{ secrets.FTP_LOCAL }}
           touch ~/.ssh/config
           echo StrictHostKeyChecking accept-new > ~/.ssh/config
+
+      - name: Get backups from Minecraft server
+        run: |
           lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;"
 
       - name: Upload to Google Drive
