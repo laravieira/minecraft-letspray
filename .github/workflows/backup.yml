@@ -13,28 +13,13 @@ jobs:
           sudo apt update
           sudo apt install lftp -y
           mkdir ${{ secrets.FTP_LOCAL }}
-          mkdir ~/.ssh
-          touch ~/.ssh/config
-          echo StrictHostKeyChecking accept-new > ~/.ssh/config
+          # mkdir ~/.ssh
+          # touch ~/.ssh/config
+          # echo StrictHostKeyChecking accept-new > ~/.ssh/config
 
       - name: Get backups from Minecraft server
-        uses: pressidium/lftp-mirror-action@v1
-        with:
-          # SFTP credentials
-          host: ${{ secrets.FTP_HOST }}
-          port: ${{ secrets.FTP_PORT }}
-          user: ${{ secrets.FTP_USER }}
-          pass: ${{ secrets.FTP_PASS }}
-          # lftp settings
-          onlyNewer: true
-          settings: 'sftp:auto-confirm=yes'
-          # Mirror command options
-          localDir: ${{ secrets.FTP_LOCAL }}
-          remoteDir: ${{ secrets.FTP_REMOTE }}
-          reverse: true
-          options: '--verbose'
-      #  run: |
-      #    lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "set ssl:verify-certificate false; mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;" -d
+        run: |
+          lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "set ssl:verify-certificate yes; mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;" -d
 
       - name: Upload to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
