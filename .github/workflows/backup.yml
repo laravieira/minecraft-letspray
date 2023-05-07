@@ -19,7 +19,7 @@ jobs:
 
       - name: Get backups from Minecraft server
         run: |
-          lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;" -d
+          lftp ${{ secrets.FTP_HOST }} -p ${{ secrets.FTP_PORT }} -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} -e "set ssl:verify-certificate false; mirror --only-newer --ignore-time --continue --delete ${{ secrets.FTP_REMOTE }} ${{ secrets.FTP_LOCAL }}; quit;" -d
 
       - name: Upload to Google Drive
         uses: adityak74/google-drive-upload-git-action@main
