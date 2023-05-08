@@ -12,7 +12,7 @@ import json
 import urllib.request
 
 SERVER_BACKUP = os.getenv('SERVER_BACKUP_FOLDER')
-SERVER_ID = os.getenv('SERVER_ID')
+SERVER_ID = os.getenv('PENTADACTYL_SERVER')
 
 def files_to_backup(server, drive):
     print('Getting files to backup.')
