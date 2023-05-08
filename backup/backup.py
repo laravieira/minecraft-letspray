@@ -5,15 +5,14 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
 
-import os.path
-import os.environ
+import os
 import sys
 import base64
 import json
 import urllib.request
 
-SERVER_BACKUP = os.environ['SERVER_BACKUP_FOLDER']
-SERVER_ID = os.environ['SERVER_ID']
+SERVER_BACKUP = os.getenv('SERVER_BACKUP_FOLDER')
+SERVER_ID = os.getenv('SERVER_ID')
 
 def files_to_backup(server, drive):
     print('Getting files to backup.')
@@ -31,7 +30,7 @@ def files_to_backup(server, drive):
     return upload
 
 def backup_files(server, drive, upload):
-    GD_FOLDER = os.environ['GCP_FOLDER_ID']
+    GD_FOLDER = os.getenv('GCP_FOLDER_ID')
     
     for file in upload:
         print('Temporary downloading ', file['attributes']['name'], '(', file['attributes']['size']/1000000, 'MB).')
@@ -54,15 +53,15 @@ def backup_files(server, drive, upload):
         print('Upload of ', file['attributes']['name'], ' completed.')
 
 def connect_to_pentadactyl():
-    SERVER_URL = os.environ['PENTADACTYL_HOST']
-    SERVER_API = os.environ['PENTADACTYL_KEY']
+    SERVER_URL = os.getenv('PENTADACTYL_HOST')
+    SERVER_API = os.getenv('PENTADACTYL_KEY')
     
     print('Credentials to Pentadactyl builded.')
     return PterodactylClient(SERVER_URL, SERVER_API)
 
 def connect_to_google_drive_api():
     SCOPES = ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.metadata']
-    GCP_CREDENTIALS = os.environ['GCP_CREDENTIALS']
+    GCP_CREDENTIALS = os.getenv('GCP_CREDENTIALS')
     
     # Create credentials file for GD API
     if os.path.exists('credentials.json') == False:
