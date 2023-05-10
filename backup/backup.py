@@ -1,23 +1,24 @@
 from pydactyl import PterodactylClient
 
-from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
 
 import os
-import sys
 import base64
-import json
 import urllib.request
 
 SERVER_BACKUP = os.getenv('SERVER_BACKUP_FOLDER')
 SERVER_ID = os.getenv('PENTADACTYL_SERVER')
 
-def files_to_backup(server, drive):
-    print('Getting files to backup.')
+def get_files_list(server, drive):
+    print('Listing files.')
     gd_files = drive.files().list(pageSize=20, supportsAllDrives=True, includeItemsFromAllDrives=True, fields="files(id, name)", orderBy='name desc').execute().get('files')
     mc_files = server.client.servers.files.list_files(SERVER_ID, SERVER_BACKUP)
+    return mc_files, gd_files
+
+def files_to_backup(mc_files, gd_files):
+    print('Getting files to backup.')
 
     upload = []
     for mc_file in mc_files['data']:
@@ -28,6 +29,26 @@ def files_to_backup(server, drive):
         if has == None:
             upload.append(mc_file)
     return upload
+
+def files_to_delete(mc_files, gd_files):
+    print('Getting old files to remove from Google Drive.')
+    remove = []
+    for gd_file in gd_files:
+        has = None
+        for mc_file in mc_files:
+            if gd_file['name'] == mc_file['attributes']['name']:
+                has = mc_file
+        if has == None:
+            remove.append(gd_file)
+    return remove
+
+def remove_old(drive, delete):
+    for file in delete:
+        try:
+            drive.files().delete(file['id']).execute()
+            print('File', file['name'], 'deleted from Google Drive.')
+        except:
+            file = None
 
 def backup_files(server, drive, upload):
     GD_FOLDER = os.getenv('GCP_FOLDER_ID')
@@ -76,7 +97,13 @@ def connect_to_google_drive_api():
 def main():
     server = connect_to_pentadactyl()
     drive = connect_to_google_drive_api()
-    upload = files_to_backup(server, drive)
+
+    mc_files, gd_files = get_files_list(server, drive)
+
+    delete = files_to_delete(mc_files, gd_files)
+    remove_old(drive, delete)
+
+    upload = files_to_backup(mc_files, gd_files)
     backup_files(server, drive, upload)
 
 if __name__ == "__main__":
