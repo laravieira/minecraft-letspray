@@ -6,10 +6,12 @@ from google.oauth2 import service_account
 
 import os
 import base64
+import logging
 import urllib.request
 
 SERVER_BACKUP = os.getenv('SERVER_BACKUP_FOLDER')
 SERVER_ID = os.getenv('PENTADACTYL_SERVER')
+logging.getLogger().setLevel(logging.ERROR)
 
 def get_files_list(server, drive):
     print('Listing files.')
@@ -45,7 +47,7 @@ def files_to_delete(mc_files, gd_files):
 def delete_files(drive, delete):
     for file in delete:
         try:
-            drive.files().delete(file['id']).execute()
+            drive.files().delete(fileId=file['id']).execute()
             print('File', file['name'], 'deleted from Google Drive.')
         except:
             file = None
