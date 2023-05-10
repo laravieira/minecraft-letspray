@@ -32,17 +32,17 @@ def files_to_backup(mc_files, gd_files):
 
 def files_to_delete(mc_files, gd_files):
     print('Getting old files to remove from Google Drive.')
-    remove = []
+    delete = []
     for gd_file in gd_files:
         has = None
-        for mc_file in mc_files:
+        for mc_file in mc_files['data']:
             if gd_file['name'] == mc_file['attributes']['name']:
-                has = mc_file
+                has = gd_file
         if has == None:
-            remove.append(gd_file)
-    return remove
+            delete.append(gd_file)
+    return delete
 
-def remove_old(drive, delete):
+def delete_files(drive, delete):
     for file in delete:
         try:
             drive.files().delete(file['id']).execute()
@@ -101,7 +101,7 @@ def main():
     mc_files, gd_files = get_files_list(server, drive)
 
     delete = files_to_delete(mc_files, gd_files)
-    remove_old(drive, delete)
+    delete_files(drive, delete)
 
     upload = files_to_backup(mc_files, gd_files)
     backup_files(server, drive, upload)
