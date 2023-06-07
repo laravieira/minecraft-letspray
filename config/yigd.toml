@@ -24,6 +24,7 @@ trySoftApproach = "RADIUS"
 tryStrict = true
 replaceWhenClaimed = true
 persistGraves = false
+onDestroyedDrop = "NONE"
 blacklistDimensions = []
 graveInVoid = true
 ignoreDeathTypes = []
@@ -33,7 +34,7 @@ putXpInGrave = true
 defaultXpDrop = false
 xpDropPercent = 50
 tellDeathPos = true
-maxGraveBackups = 50
+maxGraveBackups = 0
 
 [graveSettings.graveRobbing]
 enableRobbing = true

@@ -1,5 +1,7 @@
 /.git
 /scratch.sh
+/crash-reports
+/dynmap
 /.fabric
 /libraries
 /logs
@@ -8,3 +10,4 @@
 /backups
 /*.json
 credentials.json
+ignore
