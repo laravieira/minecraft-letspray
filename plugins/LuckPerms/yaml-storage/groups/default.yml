@@ -1,0 +1,14 @@
+name: default
+permissions:
+- minecraft.command.help
+- minecraft.command.list
+- bukkit.command.plugins
+- bukkit.command.version
+- minecraft.command.seed
+- minecraft.command.tell
+prefixes:
+- '&5[&8':
+    priority: 1
+suffixes:
+- '&r&5] &7':
+    priority: 1
