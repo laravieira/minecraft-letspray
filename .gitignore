@@ -10,11 +10,15 @@
 /logs
 **/libs
 **/translations
+**/languages
+**/Players
+**/Skins
 **/PluginMetrics
 **/bStats
 /versions
-/world
+/world*
 /backups
 **/*.json
+uuid-cache.json
 credentials.json
 ignore
