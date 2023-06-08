@@ -1,6 +1,5 @@
 name: default
 permissions:
-- minecraft.command.help
 - minecraft.command.list
 - bukkit.command.plugins
 - bukkit.command.version
