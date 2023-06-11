@@ -2,7 +2,7 @@
 
 :: Server Variables
 SET window-title=LetsPray Vanilla
-SET server-file=spigot-1.20.jar
+SET server-file=paper-1.20-8.jar
 SET server-memory=4G
 
 
